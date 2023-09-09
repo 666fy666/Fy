@@ -14,6 +14,8 @@ b站(bilibili.py)
 
 ip代理(ip.py)
 
+爱奇艺(iqiyi_info.py,iqiyi_red.py)
+
 企业微信推送(wx.py)
 
 qqbot推送(QQpush.py)
