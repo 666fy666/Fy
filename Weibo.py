@@ -4,11 +4,11 @@ new Env('微博监控');
 """
 import os
 import random
-import time
-from wx import WeChatPub
 
 import pymysql
 import requests
+
+from wx import WeChatPub
 
 
 class WeiBo:
