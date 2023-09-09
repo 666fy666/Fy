@@ -8,7 +8,7 @@
 
 虎牙直播(huya.py)
 
-微博(Weibo.py)
+微博监控(Weibo.py)
 
 b站(bilibili.py)
 
