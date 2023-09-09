@@ -16,5 +16,5 @@ ip代理(ip.py)
 
 企业微信推送(wx.py)
 
-qqbot推送(QQQpush.py)
+qqbot推送(qqpush.py)
 
