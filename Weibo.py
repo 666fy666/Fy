@@ -44,7 +44,7 @@ class WeiBo:
             print(ms)
             new = 1
             self.go(data, new)
-        elif int(old) < info_num:
+        elif int(old) < 299:
             ms = "{} 发布了{}条微博😍".format(info_name, info_num - int(old))
             print(ms)
             new = 1
