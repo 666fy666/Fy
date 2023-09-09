@@ -81,9 +81,9 @@ class Ikuuu:
         }
         r = requests.post(url, headers=headers)
         try:
-            info = r.json()["msg"]
+            info = "                       " + r.json()["msg"]
         except:
-            info = "cookies似乎过期了"
+            info = "                       cookies似乎过期了"
         return info
 
     def login(self):  # 拿账号密码登录获取cookies
