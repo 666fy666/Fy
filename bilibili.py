@@ -1,5 +1,6 @@
 """
 Author: Fy
+cron: 0 */15 * * * ?
 new Env('b站监控');
 """
 import random

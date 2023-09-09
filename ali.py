@@ -2,6 +2,7 @@
 # coding=utf-8
 """
 Author: Fy
+cron: 0 */1 * * * ?
 new Env('阿里云盘9月自动签到');
 """
 import os

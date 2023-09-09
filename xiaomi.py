@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 """
 Author: Fy
+cron: 0 10 20 * * ?
 new Env('小米运动');
 """
 import datetime

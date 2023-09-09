@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-实现百度贴吧签到
-API：
-一键签到 POST https://tieba.baidu.com/tbmall/onekeySignin1
-逐个签到 POST https://tieba.baidu.com/sign/add
-
-注意事项：
-1、百度贴吧0点到1点是不能够使用一键签到的，所以要逐个贴吧进行签到
+cron: 0 5 0 * * ?
+new Env('百度贴吧');
 """
 
 import os

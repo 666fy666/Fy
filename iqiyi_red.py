@@ -3,7 +3,8 @@ coding:utf-8
 @Software:PyCharm
 @Time:2023/9/9 12:28
 @Author:FengYu
-new Env('爱奇艺红包')
+cron: 0 10 0 * * ?
+new Env('爱奇艺红包');
 """
 from wx import WeChatPub
 

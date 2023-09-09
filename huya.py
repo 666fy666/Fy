@@ -1,7 +1,7 @@
 """
 Author: Fy
+cron: 0 */2 * * * ?
 new Env('虎牙直播监控');
-cron
 """
 # 获取虎牙直播的真实流媒体地址。
 import json

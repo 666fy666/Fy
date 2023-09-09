@@ -1,5 +1,6 @@
 """
 Author: Fy
+cron: 0 55 23 * * ?
 new Env('ikuuu机场签到');
 """
 import os

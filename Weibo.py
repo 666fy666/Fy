@@ -1,5 +1,6 @@
 """
 Author: Fy
+cron: 0 */1 * * * ?
 new Env('微博监控');
 """
 import os

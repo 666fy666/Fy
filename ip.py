@@ -1,5 +1,6 @@
 """
 Author: Fy
+cron: 0 0 2 * * ?
 new Env('ip池');
 """
 import re
