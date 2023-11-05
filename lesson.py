@@ -51,16 +51,6 @@ class Lesson:
                 local = "C418"
                 timing = "9:55"
                 return name, local, timing
-            if self.hour == 12 and self.minute == 50:
-                name = "研究生论文指导"
-                local = "E218"
-                timing = "13:20"
-                return name, local, timing
-            if self.hour == 17 and self.minute == 50:
-                name = "实验室安全"
-                local = "A510"
-                timing = "18:20"
-                return name, local, timing
         if self.week == 3:
             if self.hour == 12 and self.minute == 50:
                 name = "交通运输工程学"
