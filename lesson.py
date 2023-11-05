@@ -46,10 +46,10 @@ class Lesson:
                 timing = "15:00"
                 return name, local, timing
         if self.week == 2:
-            if self.hour == 9 and self.minute == 25:
+            if self.hour == 9 and self.minute == 45:
                 name = "交通运输前沿课程"
-                local = "C418"
-                timing = "9:55"
+                local = "D214"
+                timing = "10.15"
                 return name, local, timing
         if self.week == 3:
             if self.hour == 12 and self.minute == 50:
