@@ -30,7 +30,6 @@ class Ikuuu:
         info = self.analysis(cookies) + "\n"
         info += self.sign(cookies)
         print(info)
-        self.wx_pro(info)
 
     def analysis(self, cookies):
         url = "https://ikuuu.art/user"
@@ -84,6 +83,7 @@ class Ikuuu:
             info = "                       " + r.json()["msg"]
         except:
             info = "                       cookies似乎过期了"
+        self.wx_pro(info)
         return info
 
     def login(self):  # 拿账号密码登录获取cookies
@@ -135,4 +135,3 @@ if __name__ == '__main__':
         os.remove("code.png")
     except:
         pass
-
