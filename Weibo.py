@@ -5,6 +5,7 @@ new Env('微博监控');
 """
 import os
 import random
+import time
 
 import pymysql
 import requests
@@ -40,6 +41,7 @@ class WeiBo:
             "微博数": str(info_num),
         }
         old = self.check()
+        time.sleep(1)
         if old == "-1":
             ms = "{} 的最近一条微博😊".format(info_name)
             print(ms)
@@ -67,6 +69,7 @@ class WeiBo:
     def choose_in(self, data):  # 判断GitHub上是否有上传记录
         print(data)
         self.del_database()
+        time.sleep(2)
         self.in_database(data)
 
     def wx_pro(self, text, mid, new):  # 采用企业微信图文推送（效果好）
