@@ -162,18 +162,19 @@ class WeiBo:
         return int(num)
 
     def pre(self, url):  # 找置顶微博和解析微博的准备工作
-        proxy_ip = "https://" + self.get_ip()
+        # proxy_ip = "https://" + self.get_ip()
         # 设置代理信息
-        proxies = {
-            "http": proxy_ip,
-        }
+        # proxies = {
+        # "http": proxy_ip,
+        # }
         # print(proxies)
         session = requests.session()
         headers = {
             "User-Agent": User_Agent,
             "Cookie": Cookie
         }
-        r = session.get(url, headers=headers, proxies=proxies, timeout=60)
+        # r = session.get(url, headers=headers, proxies=proxies, timeout=60)
+        r = session.get(url, headers=headers, timeout=60)
         return r
 
     def get_ip(self):
