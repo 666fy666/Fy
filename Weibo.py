@@ -94,7 +94,7 @@ class WeiBo:
         wechat.send_text(
             title='{} {}了一条weibo'.format(info_name, new),  # 标题
             message='Ta说:👇\n{}\n{}\n认证:{}\n\n简介:{}\n\n{}'.format
-            (text, "=" * 38, info_verified_reason, info_description, res),  # 说明文案
+            (text, "=" * 35, info_verified_reason, info_description, res),  # 说明文案
             purl=r"https://m.weibo.cn/detail/{}".format(mid)  # 链接地址
         )
 
