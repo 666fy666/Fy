@@ -20,7 +20,7 @@ class Ikuuu:
             allin = re.split(r'[:：;]', total)
             self.acc = allin[0]
             self.pwd = allin[1]
-            print("找到环境变量")
+            print("找到环境变量!")
         else:
             self.acc = "657769008@qq.com"
             self.pwd = "Fy12345678"
