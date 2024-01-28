@@ -5,6 +5,7 @@ new Env('微博监控');
 """
 import os
 import random
+import threading
 import time
 
 import pymysql
@@ -12,9 +13,27 @@ import requests
 
 from wx import WeChatPub
 
+url = "https://gitcode.net/qq_35720175/tip/-/raw/master/config.json"
+file = requests.get(url)
+User_Agent = file.json()["User-Agent"]
+Cookie = file.json()["Cookie"]
+pushplus = file.json()["pushplus"]
+not_show = file.json()["not_show"]
+email = file.json()["email"]
+token = file.json()["token"]
+uid = file.json()["uid"]
+host = file.json()["host"]
+user = file.json()["user"]
+pwd = file.json()["password"]
+dbs = file.json()["db"]
+
 
 class WeiBo:
     def __init__(self, id):
+        db = pymysql.connect(host='%s' % host, user='%s' % user, password='%s' % pwd, port=3306, db='%s' % dbs)
+        cursor = db.cursor()
+        self.db = db
+        self.cursor = cursor
         self.id = id  # 微博的uid，唯一的账号身份认证
 
     def main(self):
@@ -60,6 +79,8 @@ class WeiBo:
         else:
             ms = "{} 最近在摸鱼🐟".format(info_name)
             print(ms)
+        self.cursor.close()
+        self.db.close()
 
     def go(self, data, new):
         self.choose_in(data)  # 上传服务器保存（判断是否是首次上传）
@@ -69,7 +90,7 @@ class WeiBo:
     def choose_in(self, data):  # 判断GitHub上是否有上传记录
         print(data)
         self.del_database()
-        time.sleep(0.5)
+        time.sleep(1)
         self.in_database(data)
 
     def wx_pro(self, text, mid, new):  # 采用企业微信图文推送（效果好）
@@ -78,8 +99,8 @@ class WeiBo:
         else:
             new = "删除"
         sql = 'select 用户名, 认证信息, 简介 from weibo where UID=%s'
-        cursor.execute(sql, self.id)
-        result = cursor.fetchall()  # 返回所有数据
+        self.cursor.execute(sql, self.id)
+        result = self.cursor.fetchall()  # 返回所有数据
         # result = cursor.fetchone()  # 返回一行数据
         # result = cursor.fetchmany(1)  # fetchmany(size) 获取查询结果集中指定数量的记录，size默认为1
         info_name = result[0][0]
@@ -124,13 +145,13 @@ class WeiBo:
     def check(self):  # 判断是否是第一次录入信息并查询微博数
         try:
             sql = 'select 微博数 from weibo where UID=%s'
-            cursor.execute(sql, self.id)
+            self.cursor.execute(sql, self.id)
             # result = cursor.fetchall()  # 返回所有数据
-            result = cursor.fetchone()  # 返回一行数据
+            result = self.cursor.fetchone()  # 返回一行数据
             # result = cursor.fetchmany(1)  # fetchmany(size) 获取查询结果集中指定数量的记录，size默认为1
             old_num = str(result[0])
         except:
-            db.rollback()
+            self.db.rollback()
             print("未查找到该用户，将信息录入")
             old_num = "-1"
         return old_num
@@ -138,21 +159,21 @@ class WeiBo:
     def del_database(self):  # 更新数据库(删除旧数据)
         try:
             sql = 'delete from  weibo where UID = %s'
-            cursor.execute(sql, self.id)
-            db.commit()
+            self.cursor.execute(sql, self.id)
+            self.db.commit()
         except Exception as e:
-            db.rollback()
+            self.db.rollback()
             print(e)
 
     def in_database(self, data):  # 更新数据库(插入新数据)
         sql = ('insert into weibo(UID,用户名,认证信息,简介,粉丝数,微博数) '
                'VALUES(%(UID)s, %(用户名)s, %(认证信息)s,%(简介)s,%(粉丝数)s,%(微博数)s)')
         try:
-            cursor.execute(sql, data)
-            db.commit()
+            self.cursor.execute(sql, data)
+            self.db.commit()
             print("successful")
         except Exception as e:
-            db.rollback()
+            self.db.rollback()
             print(e)
 
     def top(self):  # 验证置顶微博数，防止截图错位
@@ -179,46 +200,33 @@ class WeiBo:
 
     def get_ip(self):
         sql = 'select count(proxy) from IP'
-        cursor.execute(sql)
-        num = cursor.fetchall()[0][0]  # 返回所有数据
+        self.cursor.execute(sql)
+        num = self.cursor.fetchall()[0][0]  # 返回所有数据
         temp_ip = []
         sql = 'select proxy from IP'
-        cursor.execute(sql)
+        self.cursor.execute(sql)
         for i in range(0, num):
-            result = cursor.fetchone()[0]  # 返回一行数据
+            result = self.cursor.fetchone()[0]  # 返回一行数据
             temp_ip.append(result)
         a = random.randint(1, num - 1)
         return temp_ip[a]
 
 
-if __name__ == '__main__':
-    url = "https://gitcode.net/qq_35720175/tip/-/raw/master/config.json"
-    file = requests.get(url)
-    User_Agent = file.json()["User-Agent"]
-    Cookie = file.json()["Cookie"]
-    pushplus = file.json()["pushplus"]
-    not_show = file.json()["not_show"]
-    email = file.json()["email"]
-    token = file.json()["token"]
-    uid = file.json()["uid"]
-    host = file.json()["host"]
-    user = file.json()["user"]
-    pwd = file.json()["password"]
-    dbs = file.json()["db"]
-    db = pymysql.connect(host='%s' % host, user='%s' % user, password='%s' % pwd, port=3306, db='%s' % dbs)
-    cursor = db.cursor()
-    for i in range(len(uid)):
-        for u in range(0, 5):
-            try:
-                weibo = WeiBo(uid[i])
-                weibo.main()
-                print("=" * 80)
-                break
-            except Exception as e:
-                print(e)
-    cursor.close()
-    db.close()
+def process_user(uid):
     try:
-        os.remove("code.png")
-    except:
-        pass
+        weibo = WeiBo(uid)
+        weibo.main()
+    except Exception as e:
+        print(e)
+
+
+if __name__ == '__main__':
+    threads = []
+    for i in range(len(uid)):
+        thread = threading.Thread(target=process_user, args=(uid[i],))
+        threads.append(thread)
+        thread.start()
+
+    # Wait for all threads to finish
+    for thread in threads:
+        thread.join()
