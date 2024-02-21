@@ -20,4 +20,6 @@ b站(bilibili.py)
 
 天气推送(weather.py)
 
+服务器检测(xxqg.py)
+
 
