@@ -13,7 +13,7 @@ import requests
 
 from wx import WeChatPub
 
-url = "https://gitcode.net/qq_35720175/tip/-/raw/master/config.json"
+url = "https://raw.gitcode.com/qq_35720175/web/raw/main/config.json"
 file = requests.get(url)
 User_Agent = file.json()["User-Agent"]
 Cookie = file.json()["Cookie"]
