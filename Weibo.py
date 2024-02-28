@@ -60,7 +60,7 @@ class WeiBo:
             "微博数": str(info_num),
         }
         old = self.check()
-        time.sleep(1)
+        time.sleep(3)
         if old == "-1":
             ms = "{} 的最近一条微博😊".format(info_name)
             print(ms)
