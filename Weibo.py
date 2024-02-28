@@ -90,7 +90,7 @@ class WeiBo:
     def choose_in(self, data):  # 判断GitHub上是否有上传记录
         print(data)
         self.del_database()
-        time.sleep(1)
+        time.sleep(3)
         self.in_database(data)
 
     def wx_pro(self, text, mid, new):  # 采用企业微信图文推送（效果好）
