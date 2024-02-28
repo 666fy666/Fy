@@ -212,7 +212,7 @@ class HuYa:
 
 
 if __name__ == '__main__':
-    url = "https://gitcode.net/qq_35720175/tip/-/raw/master/config.json"
+    url = "https://raw.gitcode.com/qq_35720175/web/raw/main/config.json"
     file = requests.get(url)
     rid = file.json()["room"]
     host = file.json()["host"]
