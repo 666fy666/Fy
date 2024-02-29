@@ -55,7 +55,7 @@ class Lesson:
             if self.hour == 7 and self.minute == 40:
                 name = "交通安全理论"
                 local = "A403"
-                timing = "13:20"
+                timing = "8:15"
                 return name, local, timing
             if self.hour == 17 and self.minute == 50:
                 name = "现代检测技术"
@@ -63,10 +63,10 @@ class Lesson:
                 timing = "18:10"
                 return name, local, timing
         if self.week == 4:
-            if self.hour == 9 and self.minute == 25:
+            if self.hour == 9 and self.minute == 40:
                 name = "英语"
                 local = "D306"
-                timing = "9:55"
+                timing = "10:15"
                 return name, local, timing
 
 
