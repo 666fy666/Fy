@@ -1,12 +1,9 @@
 """
 Author: Fy
-cron: 0 */1 * * * ?
+cron: */15 * * * * ?
 new Env('微博监控');
 """
-import os
-import random
 import threading
-import time
 
 import pymysql
 import requests
@@ -59,45 +56,35 @@ class WeiBo:
             "粉丝数": info_followers,
             "微博数": str(info_num),
         }
-        old = self.check()
-        time.sleep(3)
-        if old == "-1":
+        old = self.check()  # 检查是否为新用户
+        if old == "-1":  # -1表示为新用户，用insert插入新数据
             ms = "{} 的最近一条微博😊".format(info_name)
             print(ms)
-            new = 1
-            self.go(data, new)
-        elif int(old) < info_num:
+            new = "分享"
+            self.in_database(data)
+            text, mid = self.analysis()  # 解析新发微博
+            self.wx_pro(text, mid, new)  # 企业微信推送（效果好）
+        elif int(old) < info_num:  # 大于0表示为老用户，用update更新数据
             ms = "{} 发布了{}条微博😍".format(info_name, info_num - int(old))
             print(ms)
-            new = 1
-            self.go(data, new)
-        elif int(old) > info_num:
+            new = "分享"
+            self.update_database(data)
+            text, mid = self.analysis()  # 解析新发微博
+            self.wx_pro(text, mid, new)  # 企业微信推送（效果好）
+        elif int(old) > info_num:  # 大于0表示为老用户，用update更新数据
             ms = "{} 删除了{}条微博😞".format(info_name, int(old) - info_num)
             print(ms)
-            new = 0
-            self.go(data, new)
+            new = "删除"
+            self.update_database(data)
+            text, mid = self.analysis()  # 解析新发微博
+            self.wx_pro(text, mid, new)  # 企业微信推送（效果好）
         else:
             ms = "{} 最近在摸鱼🐟".format(info_name)
             print(ms)
         self.cursor.close()
         self.db.close()
 
-    def go(self, data, new):
-        self.choose_in(data)  # 上传服务器保存（判断是否是首次上传）
-        text, mid = self.analysis()  # 解析新发微博
-        self.wx_pro(text, mid, new)  # 企业微信推送（效果好）
-
-    def choose_in(self, data):  # 判断GitHub上是否有上传记录
-        print(data)
-        self.del_database()
-        time.sleep(3)
-        self.in_database(data)
-
     def wx_pro(self, text, mid, new):  # 采用企业微信图文推送（效果好）
-        if new == 1:
-            new = "分享"
-        else:
-            new = "删除"
         sql = 'select 用户名, 认证信息, 简介 from weibo where UID=%s'
         self.cursor.execute(sql, self.id)
         result = self.cursor.fetchall()  # 返回所有数据
@@ -156,16 +143,16 @@ class WeiBo:
             old_num = "-1"
         return old_num
 
-    def del_database(self):  # 更新数据库(删除旧数据)
+    def update_database(self, data):  # 更新数据库
         try:
-            sql = 'delete from  weibo where UID = %s'
-            self.cursor.execute(sql, self.id)
+            sql = 'update weibo set 微博数=%(微博数)s where UID=%(UID)s'
+            self.cursor.execute(sql, data)
             self.db.commit()
         except Exception as e:
             self.db.rollback()
             print(e)
 
-    def in_database(self, data):  # 更新数据库(插入新数据)
+    def in_database(self, data):  # 插入新数据
         sql = ('insert into weibo(UID,用户名,认证信息,简介,粉丝数,微博数) '
                'VALUES(%(UID)s, %(用户名)s, %(认证信息)s,%(简介)s,%(粉丝数)s,%(微博数)s)')
         try:
@@ -197,19 +184,6 @@ class WeiBo:
         # r = session.get(url, headers=headers, proxies=proxies, timeout=60)
         r = session.get(url, headers=headers, timeout=60)
         return r
-
-    def get_ip(self):
-        sql = 'select count(proxy) from IP'
-        self.cursor.execute(sql)
-        num = self.cursor.fetchall()[0][0]  # 返回所有数据
-        temp_ip = []
-        sql = 'select proxy from IP'
-        self.cursor.execute(sql)
-        for i in range(0, num):
-            result = self.cursor.fetchone()[0]  # 返回一行数据
-            temp_ip.append(result)
-        a = random.randint(1, num - 1)
-        return temp_ip[a]
 
 
 def process_user(uid):
