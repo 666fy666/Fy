@@ -10,8 +10,6 @@
 
 微博监控(Weibo.py)
 
-b站(bilibili.py)
-
 爱奇艺(iqiyi_info.py,iqiyi_red.py)
 
 企业微信推送(wx.py)
