@@ -151,7 +151,6 @@ class WeiBo:
         return old_num
 
     def update_database(self, data):  # 更新数据库
-        time.sleep(2)
         sql = 'update weibo set 微博数=%(微博数)s where UID=%(UID)s'
         try:
             self.cursor.execute(sql, data)
@@ -159,6 +158,7 @@ class WeiBo:
         except Exception as e:
             self.db.rollback()
             print(e)
+        time.sleep(1)
 
     def in_database(self, data):  # 插入新数据
         time.sleep(1)
