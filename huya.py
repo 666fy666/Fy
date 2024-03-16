@@ -61,13 +61,8 @@ class HuYa:
         return urlencode({x: y[0] for x, y in q.items()})
 
     def get_anonymous_uid(self):
-        proxy_ip = "https://" + self.get_ip()
-        # 设置代理信息
-        proxies = {
-            "http": proxy_ip,
-        }
         url = "https://udblgn.huya.com/web/anonymousLogin"
-        resp = requests.post(url, proxies=proxies,json={
+        resp = requests.post(url,json={
             "appId": 5002,
             "byPass": 3,
             "context": "",
@@ -84,18 +79,13 @@ class HuYa:
 
     def get_real_url(self):
         try:
-            proxy_ip = "https://" + self.get_ip()
-            # 设置代理信息
-            proxies = {
-                "http": proxy_ip,
-            }
             room_url = 'https://m.huya.com/' + str(self.room_id)
             header = {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'User-Agent': 'Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) '
                               'Chrome/75.0.3770.100 Mobile Safari/537.36 '
             }
-            response = requests.get(url=room_url, proxies=proxies,headers=header).text
+            response = requests.get(url=room_url,headers=header).text
             room_info_str = re.findall(r'\<script\> window.HNF_GLOBAL_INIT = (.*) \</script\>', response)[0]
             room_info = json.loads(room_info_str)
             data = {
@@ -141,19 +131,6 @@ class HuYa:
             data["real_url"] = real_url
             self.check(data)
             self.wx_pro(data)
-
-    def get_ip(self):
-        sql = 'select count(proxy) from IP'
-        cursor.execute(sql)
-        num = cursor.fetchall()[0][0]  # 返回所有数据
-        temp_ip = []
-        sql = 'select proxy from IP'
-        cursor.execute(sql)
-        for i in range(0, num):
-            result = cursor.fetchone()[0]  # 返回一行数据
-            temp_ip.append(result)
-        a = random.randint(0,num)
-        return temp_ip[a]
 
     def wx_pro(self, data):  # 采用企业微信图文推送（效果好）
         try:
@@ -231,4 +208,3 @@ if __name__ == '__main__':
                 break
             except:
                 print("fail")
-        time.sleep(1)
