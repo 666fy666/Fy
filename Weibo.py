@@ -137,6 +137,7 @@ class WeiBo:
 
     def check(self):  # 判断是否是第一次录入信息并查询微博数
         try:
+            time.sleep(1)
             sql = 'select 微博数 from weibo where UID=%s'
             self.cursor.execute(sql, self.id)
             # result = cursor.fetchall()  # 返回所有数据
@@ -150,8 +151,9 @@ class WeiBo:
         return old_num
 
     def update_database(self, data):  # 更新数据库
+        time.sleep(2)
+        sql = 'update weibo set 微博数=%(微博数)s where UID=%(UID)s'
         try:
-            sql = 'update weibo set 微博数=%(微博数)s where UID=%(UID)s'
             self.cursor.execute(sql, data)
             self.db.commit()
         except Exception as e:
@@ -159,12 +161,12 @@ class WeiBo:
             print(e)
 
     def in_database(self, data):  # 插入新数据
+        time.sleep(1)
         sql = ('insert into weibo(UID,用户名,认证信息,简介,粉丝数,微博数) '
                'VALUES(%(UID)s, %(用户名)s, %(认证信息)s,%(简介)s,%(粉丝数)s,%(微博数)s)')
         try:
             self.cursor.execute(sql, data)
             self.db.commit()
-            print("successful")
         except Exception as e:
             self.db.rollback()
             print(e)
