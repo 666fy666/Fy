@@ -83,8 +83,8 @@ class WeiBo:
             print(ms)
             new = "删除"
             self.update_database(data)
-            text, mid = self.analysis()  # 解析新发微博
-            self.wx_pro(text, mid, new)  # 企业微信推送（效果好）
+            time.sleep(1)
+            self.in_database(data)
         else:
             ms = "{} 最近在摸鱼🐟".format(info_name)
             print(ms)
