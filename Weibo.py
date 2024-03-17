@@ -67,29 +67,30 @@ class WeiBo:
         if old == "-1":  # -1表示为新用户，用insert插入新数据
             ms = "{} 的最近一条微博😊".format(info_name)
             print(ms)
-            new = "分享"
+            new = "首次录入"
             num = 1
             self.in_database(data)
             text, mid = self.analysis()  # 解析新发微博
             self.wx_pro(text, mid, new, num)  # 企业微信推送（效果好）
         elif int(old) < info_num:  # 大于0表示为老用户，用update更新数据
             num = info_num - int(old)
-            ms = "{} 发布了{}条微博😍".format(info_name, num)
-            print(ms)
-            new = "分享"
-            self.update_database(data)
-            text, mid = self.analysis()  # 解析新发微博
-            self.wx_pro(text, mid, new, num)  # 企业微信推送（效果好）
+            if num == 1:
+                ms = "{} 发布了{}条微博😍".format(info_name, num)
+                print(ms)
+                new = "分享"
+                self.update_database(data)
+                text, mid = self.analysis()  # 解析新发微博
+                self.wx_pro(text, mid, new, num)  # 企业微信推送（效果好）
         elif int(old) > info_num:  # 大于0表示为老用户，用update更新数据
             num = int(old) - info_num
-            ms = "{} 删除了{}条微博😞".format(info_name, num)
-            print(ms)
-            new = "删除"
-            self.update_database(data)
-            time.sleep(1)
-            text, mid = self.analysis()  # 解析新发微博
-            self.wx_pro(text, mid, new , num)  # 企业微信推送（效果好）
-            self.in_database(data)
+            if num == 1:
+                ms = "{} 删除了{}条微博😞".format(info_name, num)
+                print(ms)
+                new = "删除"
+                self.update_database(data)
+                time.sleep(1)
+                text, mid = self.analysis()  # 解析新发微博
+                self.wx_pro(text, mid, new , num)  # 企业微信推送（效果好）
         else:
             ms = "{} 最近在摸鱼🐟".format(info_name)
             print(ms)
