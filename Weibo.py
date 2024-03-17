@@ -145,7 +145,6 @@ class WeiBo:
             # result = cursor.fetchmany(1)  # fetchmany(size) 获取查询结果集中指定数量的记录，size默认为1
             old_num = str(result[0])
         except:
-            self.db.rollback()
             print("未查找到该用户，将信息录入")
             old_num = "-1"
         return old_num
