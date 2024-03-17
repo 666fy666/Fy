@@ -91,6 +91,7 @@ class WeiBo:
         self.cursor.close()
         self.db.close()
 
+
     def wx_pro(self, text, mid, new):  # 采用企业微信图文推送（效果好）
         sql = 'select 用户名, 认证信息, 简介 from weibo where UID=%s'
         self.cursor.execute(sql, self.id)
@@ -157,10 +158,8 @@ class WeiBo:
         except Exception as e:
             self.db.rollback()
             print(e)
-        time.sleep(1)
 
     def in_database(self, data):  # 插入新数据
-        time.sleep(1)
         sql = ('insert into weibo(UID,用户名,认证信息,简介,粉丝数,微博数) '
                'VALUES(%(UID)s, %(用户名)s, %(认证信息)s,%(简介)s,%(粉丝数)s,%(微博数)s)')
         try:
