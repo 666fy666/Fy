@@ -68,22 +68,27 @@ class WeiBo:
             ms = "{} 的最近一条微博😊".format(info_name)
             print(ms)
             new = "分享"
+            num = 1
             self.in_database(data)
             text, mid = self.analysis()  # 解析新发微博
-            self.wx_pro(text, mid, new)  # 企业微信推送（效果好）
+            self.wx_pro(text, mid, new, num)  # 企业微信推送（效果好）
         elif int(old) < info_num:  # 大于0表示为老用户，用update更新数据
-            ms = "{} 发布了{}条微博😍".format(info_name, info_num - int(old))
+            num = info_num - int(old)
+            ms = "{} 发布了{}条微博😍".format(info_name, num)
             print(ms)
             new = "分享"
             self.update_database(data)
             text, mid = self.analysis()  # 解析新发微博
-            self.wx_pro(text, mid, new)  # 企业微信推送（效果好）
+            self.wx_pro(text, mid, new, num)  # 企业微信推送（效果好）
         elif int(old) > info_num:  # 大于0表示为老用户，用update更新数据
-            ms = "{} 删除了{}条微博😞".format(info_name, int(old) - info_num)
+            num = info_num - int(old)
+            ms = "{} 删除了{}条微博😞".format(info_name, num)
             print(ms)
             new = "删除"
             self.update_database(data)
             time.sleep(1)
+            text, mid = self.analysis()  # 解析新发微博
+            self.wx_pro(text, mid, new , num)  # 企业微信推送（效果好）
             self.in_database(data)
         else:
             ms = "{} 最近在摸鱼🐟".format(info_name)
@@ -92,7 +97,7 @@ class WeiBo:
         self.db.close()
 
 
-    def wx_pro(self, text, mid, new):  # 采用企业微信图文推送（效果好）
+    def wx_pro(self, text, mid, new, num):  # 采用企业微信图文推送（效果好）
         sql = 'select 用户名, 认证信息, 简介 from weibo where UID=%s'
         self.cursor.execute(sql, self.id)
         result = self.cursor.fetchall()  # 返回所有数据
@@ -108,7 +113,7 @@ class WeiBo:
         res = res["hitokoto"] + "    ----" + res["from"]
         wechat = WeChatPub()
         wechat.send_text(
-            title='{} {}了一条weibo'.format(info_name, new),  # 标题
+            title='{} {}了{}条weibo'.format(info_name, new, num),  # 标题
             message='Ta说:👇\n{}\n{}\n认证:{}\n\n简介:{}\n\n{}'.format
             (text, "=" * 35, info_verified_reason, info_description, res),  # 说明文案
             purl=r"https://m.weibo.cn/detail/{}".format(mid)  # 链接地址
