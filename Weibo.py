@@ -29,12 +29,12 @@ dbs = file.json()["db"]
 class WeiBo:
     def __init__(self, id):
         try:
-            db = pymysql.connect(host='%s' % host, user='%s' % user, password='%s' % pwd, port=3306, db='%s' % dbs)
+            db = pymysql.connect(host='192.168.66.239', user='%s' % user, password='%s' % pwd, port=3306, db='%s' % dbs)
             cursor = db.cursor()
             self.db = db
             self.cursor = cursor
         except:
-            db = pymysql.connect(host='192.168.66.239', user='%s' % user, password='%s' % pwd, port=3306, db='%s' % dbs)
+            db = pymysql.connect(host='%s' % host, user='%s' % user, password='%s' % pwd, port=3306, db='%s' % dbs)
             cursor = db.cursor()
             self.db = db
             self.cursor = cursor
