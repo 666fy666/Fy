@@ -81,7 +81,7 @@ class WeiBo:
             text, mid = self.analysis()  # 解析新发微博
             self.wx_pro(text, mid, new, num)  # 企业微信推送（效果好）
         elif int(old) > info_num:  # 大于0表示为老用户，用update更新数据
-            num = info_num - int(old)
+            num = int(old) - info_num
             ms = "{} 删除了{}条微博😞".format(info_name, num)
             print(ms)
             new = "删除"
