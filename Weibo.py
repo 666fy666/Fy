@@ -138,7 +138,6 @@ class WeiBo:
 
     def check(self):  # 判断是否是第一次录入信息并查询微博数
         try:
-            time.sleep(1)
             sql = 'select 微博数 from weibo where UID=%s'
             self.cursor.execute(sql, self.id)
             # result = cursor.fetchall()  # 返回所有数据
@@ -152,8 +151,8 @@ class WeiBo:
         return old_num
 
     def update_database(self, data):  # 更新数据库
-        sql = 'update weibo set 微博数=%(微博数)s where UID=%(UID)s'
         try:
+            sql = 'update weibo set 微博数=%(微博数)s where UID=%(UID)s'
             self.cursor.execute(sql, data)
             self.db.commit()
         except Exception as e:
