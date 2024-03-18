@@ -29,6 +29,7 @@ class Ikuuu:
         cookies = self.login()
         info = self.analysis(cookies) + "\n"
         info += self.sign(cookies)
+        self.wx_pro(info)
         print(info)
 
     def analysis(self, cookies):
@@ -83,7 +84,6 @@ class Ikuuu:
             info = "                       " + r.json()["msg"]
         except:
             info = "                       cookies似乎过期了"
-        self.wx_pro(info)
         return info
 
     def login(self):  # 拿账号密码登录获取cookies
