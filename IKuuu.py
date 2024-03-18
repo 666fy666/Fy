@@ -32,11 +32,11 @@ class Ikuuu:
         print(info)
 
     def analysis(self, cookies):
-        url = "https://ikuuu.me/user"
+        url = "https://ikuuu.pw/user"
         headers = {
             "User-Agent": self.UserAgent,
             "Cookie": cookies,
-            "Referer": "https://ikuuu.me/auth/login",
+            "Referer": "https://ikuuu.pw/auth/login",
             "X-Requested-With": "XMLHttpRequest",
             "Accept": "application/json, text/javascript, */*; q=0.01",
             "Sec-Ch-Ua": '"Chromium";v="116", "Not)A;Brand";v="24", "Google Chrome";v="116"'
@@ -69,11 +69,11 @@ class Ikuuu:
         return info
 
     def sign(self, cookies):  # 签到得流量
-        url = "https://ikuuu.me/user/checkin"
+        url = "https://ikuuu.pw/user/checkin"
         headers = {
             "User-Agent": self.UserAgent,
             "Cookie": cookies,
-            "Referer": "https://ikuuu.me/auth/login",
+            "Referer": "https://ikuuu.pw/auth/login",
             "X-Requested-With": "XMLHttpRequest",
             "Accept": "application/json, text/javascript, */*; q=0.01",
             "Sec-Ch-Ua": '"Chromium";v="116", "Not)A;Brand";v="24", "Google Chrome";v="116"'
@@ -87,10 +87,10 @@ class Ikuuu:
         return info
 
     def login(self):  # 拿账号密码登录获取cookies
-        url = "https://ikuuu.me/auth/login"
+        url = "https://ikuuu.pw/auth/login"
         headers = {
             "User-Agent": self.UserAgent,
-            "Referer": "https://ikuuu.me/auth/login",
+            "Referer": "https://ikuuu.pw/auth/login",
             "X-Requested-With": "XMLHttpRequest",
             "Accept": "application/json, text/javascript, */*; q=0.01",
             "Sec-Ch-Ua": '"Chromium";v="116", "Not)A;Brand";v="24", "Google Chrome";v="116"'
