@@ -118,7 +118,7 @@ class Ikuuu:
         wechat.send_text(
             title='iKuuu机场签到提醒(*￣▽￣*)ブ',  # 标题
             message='\n{}\n\n{}'.format(info, res),  # 内容
-            purl="https://ikuuu.art/"
+            purl="https://ikuuu.pw/"
         )
 
 
