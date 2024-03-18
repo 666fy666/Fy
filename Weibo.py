@@ -7,7 +7,6 @@ import threading
 
 import pymysql
 import requests
-import time
 
 from wx import WeChatPub
 
@@ -63,40 +62,41 @@ class WeiBo:
             "粉丝数": info_followers,
             "微博数": str(info_num),
         }
-        old = self.check()  # 检查是否为新用户
-        if old == "-1":  # -1表示为新用户，用insert插入新数据
+        old_num, old_text = self.check()  # 检查是否为新用户
+        if old_num == "-1":  # -1表示为新用户，用insert插入新数据
             ms = "{} 的最近一条微博😊".format(info_name)
             print(ms)
             new = "首次录入"
             num = 1
-            self.in_database(data)
             text, mid = self.analysis()  # 解析新发微博
+            data["文本"] = text
+            self.in_database(data)
             self.wx_pro(text, mid, new, num)  # 企业微信推送（效果好）
-        elif int(old) < info_num:  # 大于0表示为老用户，用update更新数据
-            num = info_num - int(old)
-            if num == 1:
-                ms = "{} 发布了{}条微博😍".format(info_name, num)
-                print(ms)
-                new = "分享"
+        elif int(old_num) < info_num:  # 大于0表示为老用户，用update更新数据
+            num = info_num - int(old_num)
+            ms = "{} 发布了{}条微博😍".format(info_name, num)
+            print(ms)
+            new = "分享"
+            text, mid = self.analysis()  # 解析新发微博
+            if text != old_text:
+                data["文本"] = text
                 self.update_database(data)
-                text, mid = self.analysis()  # 解析新发微博
                 self.wx_pro(text, mid, new, num)  # 企业微信推送（效果好）
-        elif int(old) > info_num:  # 大于0表示为老用户，用update更新数据
-            num = int(old) - info_num
-            if num == 1:
-                ms = "{} 删除了{}条微博😞".format(info_name, num)
-                print(ms)
-                new = "删除"
+        elif int(old_num) > info_num:  # 大于0表示为老用户，用update更新数据
+            num = int(old_num) - info_num
+            ms = "{} 删除了{}条微博😞".format(info_name, num)
+            print(ms)
+            new = "删除"
+            text, mid = self.analysis()  # 解析新发微博
+            if text != old_text:
+                data["文本"] = text
                 self.update_database(data)
-                time.sleep(1)
-                text, mid = self.analysis()  # 解析新发微博
-                self.wx_pro(text, mid, new , num)  # 企业微信推送（效果好）
+                self.wx_pro(text, mid, new, num)  # 企业微信推送（效果好）
         else:
             ms = "{} 最近在摸鱼🐟".format(info_name)
             print(ms)
         self.cursor.close()
         self.db.close()
-
 
     def wx_pro(self, text, mid, new, num):  # 采用企业微信图文推送（效果好）
         sql = 'select 用户名, 认证信息, 简介 from weibo where UID=%s'
@@ -145,21 +145,30 @@ class WeiBo:
 
     def check(self):  # 判断是否是第一次录入信息并查询微博数
         try:
-            sql = 'select 微博数 from weibo where UID=%s'
-            self.cursor.execute(sql, self.id)
+            sql1 = 'select 微博数 from weibo where UID=%s'
+            self.cursor.execute(sql1, self.id)
             # result = cursor.fetchall()  # 返回所有数据
-            result = self.cursor.fetchone()  # 返回一行数据
+            result1 = self.cursor.fetchone()  # 返回一行数据
             # result = cursor.fetchmany(1)  # fetchmany(size) 获取查询结果集中指定数量的记录，size默认为1
-            old_num = str(result[0])
+            old_num = str(result1[0])
+            sql2 = 'select 文本 from weibo where UID=%s'
+            self.cursor.execute(sql2, self.id)
+            # result = cursor.fetchall()  # 返回所有数据
+            result2 = self.cursor.fetchone()  # 返回一行数据
+            # result = cursor.fetchmany(1)  # fetchmany(size) 获取查询结果集中指定数量的记录，size默认为1
+            old_text = str(result2[0])
         except:
             print("未查找到该用户，将信息录入")
             old_num = "-1"
-        return old_num
+            old_text = "-1"
+        return old_num, old_text
 
     def update_database(self, data):  # 更新数据库
         try:
-            sql = 'update weibo set 微博数=%(微博数)s where UID=%(UID)s'
-            self.cursor.execute(sql, data)
+            sql1 = 'update weibo set 微博数=%(微博数)s where UID=%(UID)s'
+            sql2 = 'update weibo set 文本=%(文本)s where UID=%(UID)s'
+            self.cursor.execute(sql1, data)
+            self.cursor.execute(sql2, data)
             self.db.commit()
         except Exception as e:
             self.db.rollback()
@@ -167,7 +176,7 @@ class WeiBo:
 
     def in_database(self, data):  # 插入新数据
         sql = ('insert into weibo(UID,用户名,认证信息,简介,粉丝数,微博数) '
-               'VALUES(%(UID)s, %(用户名)s, %(认证信息)s,%(简介)s,%(粉丝数)s,%(微博数)s)')
+               'VALUES(%(UID)s, %(用户名)s, %(认证信息)s,%(简介)s,%(粉丝数)s,%(微博数)s,%(文本)s)')
         try:
             self.cursor.execute(sql, data)
             self.db.commit()
@@ -182,18 +191,11 @@ class WeiBo:
         return int(num)
 
     def pre(self, url):  # 找置顶微博和解析微博的准备工作
-        # proxy_ip = "https://" + self.get_ip()
-        # 设置代理信息
-        # proxies = {
-        # "http": proxy_ip,
-        # }
-        # print(proxies)
         session = requests.session()
         headers = {
             "User-Agent": User_Agent,
             "Cookie": Cookie
         }
-        # r = session.get(url, headers=headers, proxies=proxies, timeout=60)
         r = session.get(url, headers=headers, timeout=60)
         return r
 
