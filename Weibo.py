@@ -175,7 +175,7 @@ class WeiBo:
             print(e)
 
     def in_database(self, data):  # 插入新数据
-        sql = ('insert into weibo(UID,用户名,认证信息,简介,粉丝数,微博数) '
+        sql = ('insert into weibo(UID,用户名,认证信息,简介,粉丝数,微博数,文本) '
                'VALUES(%(UID)s, %(用户名)s, %(认证信息)s,%(简介)s,%(粉丝数)s,%(微博数)s,%(文本)s)')
         try:
             self.cursor.execute(sql, data)
