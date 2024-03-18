@@ -1,6 +1,6 @@
 """
 Author: Fy
-cron: */15 * * * * ?
+cron: */20 * * * * ?
 new Env('微博监控');
 """
 import threading
@@ -78,9 +78,9 @@ class WeiBo:
             print(ms)
             new = "分享"
             text, mid = self.analysis()  # 解析新发微博
+            data["文本"] = text
+            self.update_database(data)
             if text != old_text:
-                data["文本"] = text
-                self.update_database(data)
                 self.wx_pro(text, mid, new, num)  # 企业微信推送（效果好）
         elif int(old_num) > info_num:  # 大于0表示为老用户，用update更新数据
             num = int(old_num) - info_num
@@ -88,9 +88,9 @@ class WeiBo:
             print(ms)
             new = "删除"
             text, mid = self.analysis()  # 解析新发微博
+            data["文本"] = text
+            self.update_database(data)
             if text != old_text:
-                data["文本"] = text
-                self.update_database(data)
                 self.wx_pro(text, mid, new, num)  # 企业微信推送（效果好）
         else:
             ms = "{} 最近在摸鱼🐟".format(info_name)
@@ -102,8 +102,6 @@ class WeiBo:
         sql = 'select 用户名, 认证信息, 简介 from weibo where UID=%s'
         self.cursor.execute(sql, self.id)
         result = self.cursor.fetchall()  # 返回所有数据
-        # result = cursor.fetchone()  # 返回一行数据
-        # result = cursor.fetchmany(1)  # fetchmany(size) 获取查询结果集中指定数量的记录，size默认为1
         info_name = result[0][0]
         info_verified_reason = result[0][1]
         info_description = result[0][2]
@@ -147,15 +145,11 @@ class WeiBo:
         try:
             sql1 = 'select 微博数 from weibo where UID=%s'
             self.cursor.execute(sql1, self.id)
-            # result = cursor.fetchall()  # 返回所有数据
             result1 = self.cursor.fetchone()  # 返回一行数据
-            # result = cursor.fetchmany(1)  # fetchmany(size) 获取查询结果集中指定数量的记录，size默认为1
             old_num = str(result1[0])
             sql2 = 'select 文本 from weibo where UID=%s'
             self.cursor.execute(sql2, self.id)
-            # result = cursor.fetchall()  # 返回所有数据
             result2 = self.cursor.fetchone()  # 返回一行数据
-            # result = cursor.fetchmany(1)  # fetchmany(size) 获取查询结果集中指定数量的记录，size默认为1
             old_text = str(result2[0])
         except:
             print("未查找到该用户，将信息录入")
@@ -201,11 +195,8 @@ class WeiBo:
 
 
 def process_user(uid):
-    try:
-        weibo = WeiBo(uid)
-        weibo.main()
-    except Exception as e:
-        print(e)
+    weibo = WeiBo(uid)
+    weibo.main()
 
 
 if __name__ == '__main__':
