@@ -1,6 +1,6 @@
 """
 Author: Fy
-cron: */20 * * * * ?
+cron: 0 */1 * * * ?
 new Env('微博监控');
 """
 import threading
