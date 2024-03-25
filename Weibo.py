@@ -1,6 +1,6 @@
 """
 Author: Fy
-cron: 0 */1 * * * ?
+cron: 0 */2 * * * ?
 new Env('微博监控');
 """
 import threading
@@ -70,6 +70,7 @@ class WeiBo:
             num = 1
             text, mid = self.analysis()  # 解析新发微博
             data["文本"] = text
+            print(data)
             self.in_database(data)
             self.wx_pro(text, mid, new, num)  # 企业微信推送（效果好）
         elif int(old_num) < info_num:  # 大于0表示为老用户，用update更新数据
@@ -200,6 +201,7 @@ def process_user(uid):
 
 
 if __name__ == '__main__':
+    '''
     threads = []
     for i in range(len(uid)):
         thread = threading.Thread(target=process_user, args=(uid[i],))
@@ -209,3 +211,7 @@ if __name__ == '__main__':
     # Wait for all threads to finish
     for thread in threads:
         thread.join()
+    '''
+    for i in range(len(uid)):
+        process_user(uid[i])
+
