@@ -148,7 +148,7 @@ if __name__ == '__main__':
     wechat.send_news(
         title='iKuuu机场签到提醒(*￣▽￣*)ブ',  # 标题
         description='\n{}\n\n{}',  # 说明文案
-        to_url=r"https://ikuuu.art/",  # 链接地址
+        to_url=r"https://ikuuu.pw/",  # 链接地址
         picurl=r"https://bing.img.run/rand_uhd.php"  # 图片地址
         # btntxt = '此处跳转'  https://www.picgo.net/image/ymwTq
     )
