@@ -3,14 +3,11 @@ Author: Fy
 cron: 0 */2 * * * ?
 new Env('微博监控');
 """
-import os
-import re
+
 import threading
 
 import pymysql
 import requests
-from bs4 import BeautifulSoup
-from lxml import etree
 
 from wx import WeChatPub
 
@@ -194,28 +191,13 @@ class WeiBo:
         return int(num)
 
     def pre(self, url):  # 找置顶微博和解析微博的准备工作
-        ip = self.get_ip()
         session = requests.session()
         headers = {
             "User-Agent": User_Agent,
             "Cookie": self.cookie
         }
-        proxy = {
-            "http": ip
-        }
-        r = session.get(url, headers=headers, proxies=proxy, timeout=60)
+        r = session.get(url, headers=headers, timeout=60)
         return r
-
-    def get_ip(self):
-        r = requests.get(
-            'http://www.66ip.cn/mo.php?sxb=&tqsl=10&port=&export=&ktip=&sxa=&submit=%CC%E1++%C8%A1&textarea=http%3A'
-            '%2F%2Fwww.66ip.cn%2F%3Fsxb%3D%26tqsl%3D10%26ports%255B%255D2%3D%26ktip%3D%26sxa%3D%26radio%3Dradio'
-            '%26submit%3D%25CC%25E1%2B%2B%25C8%25A1')
-        pattern = r'\b(?:\d{1,3}\.){3}\d{1,3}:\d+\b'
-        # Extract IP addresses using the pattern
-        ip_addresses = re.findall(pattern, r.text)
-        print(ip_addresses)
-        return ip_addresses[0]
 
 
 def process_user(uid):
