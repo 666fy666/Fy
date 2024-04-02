@@ -3,6 +3,7 @@ Author: Fy
 cron: 0 */2 * * * ?
 new Env('微博监控');
 """
+import os
 import threading
 
 import pymysql
@@ -13,7 +14,7 @@ from wx import WeChatPub
 url = "https://raw.gitcode.com/qq_35720175/web/raw/main/config.json"
 file = requests.get(url)
 User_Agent = file.json()["User-Agent"]
-Cookie = file.json()["Cookie"]
+cookie = file.json()["Cookie"]
 pushplus = file.json()["pushplus"]
 not_show = file.json()["not_show"]
 email = file.json()["email"]
@@ -38,6 +39,10 @@ class WeiBo:
             self.db = db
             self.cursor = cursor
         self.id = id  # 微博的uid，唯一的账号身份认证
+        if os.getenv('cookie'):
+            self.cookie = os.getenv('cookie')
+        else:
+            self.cookie = cookie
 
     def main(self):
         url = "https://weibo.com/ajax/profile/info?uid=%s" % self.id
@@ -189,7 +194,7 @@ class WeiBo:
         session = requests.session()
         headers = {
             "User-Agent": User_Agent,
-            "Cookie": Cookie
+            "Cookie": self.cookie
         }
         r = session.get(url, headers=headers, timeout=60)
         return r
@@ -214,4 +219,3 @@ if __name__ == '__main__':
     '''
     for i in range(len(uid)):
         process_user(uid[i])
-
