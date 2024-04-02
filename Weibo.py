@@ -3,7 +3,7 @@ Author: Fy
 cron: 0 */2 * * * ?
 new Env('微博监控');
 """
-
+import os
 import threading
 
 import pymysql
