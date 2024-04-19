@@ -40,16 +40,10 @@ class Lesson:
 
     def check_date(self):
         if self.week == 1:
-            if self.hour == 12 and self.minute == 50:
-                name = "自然辩证法"
-                local = "J303"
-                timing = "13:20"
-                return name, local, timing
-        if self.week == 2:
-            if self.hour == 16 and self.minute == 5:
-                name = "艺术赏析"
-                local = "C402"
-                timing = "16:35"
+            if self.hour == 14 and self.minute == 30:
+                name = "数据挖掘与交通大数据"
+                local = "8A412"
+                timing = "15:00"
                 return name, local, timing
         if self.week == 3:
             if self.hour == 7 and self.minute == 40:
@@ -57,16 +51,16 @@ class Lesson:
                 local = "A403"
                 timing = "8:15"
                 return name, local, timing
-            if self.hour == 17 and self.minute == 50:
+            if self.hour == 17 and self.minute == 40:
                 name = "现代检测技术"
-                local = "C306"
+                local = "B202"
                 timing = "18:10"
                 return name, local, timing
         if self.week == 4:
-            if self.hour == 9 and self.minute == 40:
-                name = "英语"
-                local = "D306"
-                timing = "10:15"
+            if self.hour == 7 and self.minute == 40:
+                name = "数据挖掘与交通大数据"
+                local = "8A412"
+                timing = "8:15"
                 return name, local, timing
 
 
