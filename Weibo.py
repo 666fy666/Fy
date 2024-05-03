@@ -129,8 +129,8 @@ class WeiBo:
             title='{} {}了{}条weibo'.format(info_name, new, num),  # 标题
             description='Ta说:👇\n{}\n{}\n认证:{}\n\n简介:{}'.format
             (text, "=" * 35, info_verified_reason, info_description),  # 说明文案
-            to_url=r"https://bing.img.run/rand.php",
-            picurl=r"https://m.weibo.cn/detail/{}".format(mid),  # 链接地址
+            picurl=r"https://bing.img.run/rand.php",
+            to_url=r"https://m.weibo.cn/detail/{}".format(mid),  # 链接地址
             btntxt='阅读全文'
         )
 
