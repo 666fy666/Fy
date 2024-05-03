@@ -37,7 +37,7 @@ class WeChatPub:
             }
             img_name = 'code.png'
             # 发送请求
-            res = requests.get( url, headers=header,timeout= 10)
+            res = requests.get(url, headers=header,timeout=10)
             with open(img_name, 'wb') as file_obj:
                 # 保存图片、音频之类 会使用content-->以二进制写入去响应对象里面取
                 file_obj.write(res.content)
