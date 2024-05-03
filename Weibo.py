@@ -113,9 +113,9 @@ class WeiBo:
         info_description = result[0][2]
         # 图片消息
         # title,description,url,picurl,btntxt='阅读全文'
-        tip = "https://v1.hitokoto.cn/"
-        res = requests.get(tip).json()
-        res = res["hitokoto"] + "    ----" + res["from"]
+        #tip = "https://v1.hitokoto.cn/"
+        #res = requests.get(tip).json()
+        #res = res["hitokoto"] + "    ----" + res["from"]
         wechat = WeChatPub()
         '''
         wechat.send_text(
@@ -127,13 +127,12 @@ class WeiBo:
         '''
         wechat.send_news(
             title='{} {}了{}条weibo'.format(info_name, new, num),  # 标题
-            description='Ta说:👇\n{}\n{}\n认证:{}\n\n简介:{}\n\n{}'.format
-            (text, "=" * 35, info_verified_reason, info_description, res),  # 说明文案
+            description='Ta说:👇\n{}\n{}\n认证:{}\n\n简介:{}'.format
+            (text, "=" * 35, info_verified_reason, info_description),  # 说明文案
             to_url=r"https://bing.img.run/rand.php",
             picurl=r"https://m.weibo.cn/detail/{}".format(mid),  # 链接地址
             btntxt='阅读全文'
         )
-        
 
     def analysis(self):  # 解析新发微博的文字和blogid
         num = self.top()
