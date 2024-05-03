@@ -30,14 +30,14 @@ class WeChatPub:
 
     def get_media_url(self):  # 上传到图片素材 图片url
         num = 1
-        while 1 == 1:
+        while True:
             url = "https://bing.img.run/rand_1366x768.php"
             header = {
                 "Content-Type": "application/json"
             }
             img_name = 'code.png'
             # 发送请求
-            res = requests.get(url, headers=header)
+            res = requests.get( url, headers=header,timeout= 10)
             with open(img_name, 'wb') as file_obj:
                 # 保存图片、音频之类 会使用content-->以二进制写入去响应对象里面取
                 file_obj.write(res.content)
