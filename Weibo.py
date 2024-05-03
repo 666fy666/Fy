@@ -127,10 +127,10 @@ class WeiBo:
         '''
         wechat.send_news(
             title='{} {}了{}条weibo'.format(info_name, new, num),  # 标题
-            message='Ta说:👇\n{}\n{}\n认证:{}\n\n简介:{}\n\n{}'.format
+            description='Ta说:👇\n{}\n{}\n认证:{}\n\n简介:{}\n\n{}'.format
             (text, "=" * 35, info_verified_reason, info_description, res),  # 说明文案
             to_url=r"https://bing.img.run/rand.php",
-            purl=r"https://m.weibo.cn/detail/{}".format(mid),  # 链接地址
+            picurl=r"https://m.weibo.cn/detail/{}".format(mid),  # 链接地址
             btntxt='阅读全文'
         )
         
